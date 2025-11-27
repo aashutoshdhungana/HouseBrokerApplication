@@ -2,7 +2,7 @@
 
 namespace HouseBrokerApplication.Domain.Aggregates.Listing
 {
-    public class ListingImage : Entity
+    public class ListingImage : AuditedEntity
     {
         public int ListingId { get; private set; }
         public int FileInfoId { get; private set; }

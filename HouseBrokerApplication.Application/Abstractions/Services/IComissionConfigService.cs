@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HouseBrokerApplication.Application.Abstractions.Commission
+namespace HouseBrokerApplication.Application.Abstractions.Services
 {
     internal interface IComissionConfigService
     {

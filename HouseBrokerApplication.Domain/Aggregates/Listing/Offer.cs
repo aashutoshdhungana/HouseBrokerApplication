@@ -2,7 +2,7 @@
 
 namespace HouseBrokerApplication.Domain.Aggregates.Listing
 {
-    public class Offer : Entity
+    public class Offer : AuditedEntity
     {
         public int BuyerId { get; private set; }
         public int ListingId { get; private set; }

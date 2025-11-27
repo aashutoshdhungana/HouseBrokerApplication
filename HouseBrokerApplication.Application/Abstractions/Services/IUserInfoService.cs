@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HouseBrokerApplication.Application.Abstractions.Listing
+namespace HouseBrokerApplication.Application.Abstractions.Services
 {
-    internal interface IListingService
+    internal interface IUserInfoService
     {
+        Task<Result<>>
     }
 }

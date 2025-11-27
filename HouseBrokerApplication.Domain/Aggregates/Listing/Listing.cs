@@ -3,7 +3,7 @@ using HouseBrokerApplication.Domain.DomainExceptions;
 
 namespace HouseBrokerApplication.Domain.Aggregates.Listing
 {
-    public class Listing : Entity, IAggregateRoot
+    public class Listing : AuditedEntity, IAggregateRoot
     {
         public string Title { get; private set; }
         public string Description { get; private set; }
@@ -43,6 +43,8 @@ namespace HouseBrokerApplication.Domain.Aggregates.Listing
         public void UpdateDetails(string title, string description, Address address, decimal price,
                                   ListingType propertyType, string contactPhone, string contactEmail)
         {
+            if (Status == ListingStatus.Sold)
+                throw new DomainException("Cannot update details of a sold listing.");
             Title = title;
             Description = description;
             Address = address;
@@ -54,6 +56,8 @@ namespace HouseBrokerApplication.Domain.Aggregates.Listing
 
         public void AddImage(FileInfo.FileInfo fileInfo, bool isPrimary = false)
         {
+            if (Status == ListingStatus.Sold)
+                throw new DomainException("Cannot add images to a sold listing.");
             var prevPrimaryImage = _images.FirstOrDefault(i => i.IsPrimary);
             if (isPrimary && prevPrimaryImage is not null) prevPrimaryImage.SetPrimary(false);
             var listingImage = new ListingImage(this, fileInfo, isPrimary);
@@ -62,6 +66,9 @@ namespace HouseBrokerApplication.Domain.Aggregates.Listing
 
         public void RemoveImage(ListingImage listingImage)
         {
+            if (Status == ListingStatus.Sold)
+                throw new DomainException("Cannot remove images from a sold listing.");
+
             if (listingImage.IsPrimary)
                 _images.Where(i => i.Id != listingImage.Id)
                     .FirstOrDefault()?
@@ -72,6 +79,8 @@ namespace HouseBrokerApplication.Domain.Aggregates.Listing
 
         public void UpdatePrimaryImage(ListingImage listingImage)
         {
+            if (Status == ListingStatus.Sold)
+                throw new DomainException("Cannot update primary image of a sold listing.");
             var prevPrimaryImage = _images.FirstOrDefault(i => i.IsPrimary);
             if (prevPrimaryImage is not null) prevPrimaryImage.SetPrimary(false);
             listingImage.SetPrimary(true);
@@ -79,6 +88,8 @@ namespace HouseBrokerApplication.Domain.Aggregates.Listing
 
         public void AddUpdateOffer(UserInfo.UserInfo userInfo, decimal offerPrice)
         {
+            if (Status == ListingStatus.Sold)
+                throw new DomainException("Cannot add offer to a sold listing.");
             var existingOffer = _offers.FirstOrDefault(o => o.BuyerId == userInfo.Id);
             if (existingOffer is not null)
             {
@@ -91,6 +102,8 @@ namespace HouseBrokerApplication.Domain.Aggregates.Listing
 
         public void RemoveOffer(int offerId)
         {
+            if (Status == ListingStatus.Sold)
+                throw new DomainException("Cannot remove offer from a sold listing.");
             if (_deals.FirstOrDefault(d => d.OfferId == offerId) is not null)
                 throw new DomainException("Cannot remove an offer that has been accepted in a deal.");
 

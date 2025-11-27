@@ -20,11 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HouseBrokerApplication.Application\HouseBrokerApplication.Application.csproj" />
     <ProjectReference Include="..\HouseBrokerApplication.Domain\HouseBrokerApplication.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="EntityConfigurations\" />
   </ItemGroup>
 
 </Project>

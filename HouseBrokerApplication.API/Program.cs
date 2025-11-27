@@ -1,6 +1,11 @@
+using HouseBrokerApplication.API.Configurations;
+using HouseBrokerApplication.API.Configurations.ConfigModels;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.ConfigureInfrastructureServices(builder.Configuration)
+    .ConfigureApplicationServices(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

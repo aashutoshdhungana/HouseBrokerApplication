@@ -2,7 +2,7 @@
 
 namespace HouseBrokerApplication.Domain.Aggregates.FileInfo
 {
-    public class FileInfo : Entity, IAggregateRoot
+    public class FileInfo : AuditedEntity, IAggregateRoot
     {
         public string DisplayName { get; private set; }
         public string StoredName { get; private set; }

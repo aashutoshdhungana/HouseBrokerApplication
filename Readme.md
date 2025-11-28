@@ -27,6 +27,8 @@ HouseBrokerApplication is a modular .NET 9 solution for managing real estate lis
 - **Listing Management**  
   - Brokers can create, update, and delete property listings.
   - Listings include address, price, property type, contact info, and images.
+  - Listing can be filtered based on the type of listing and the price
+  - There are endpoint to fetch minimal data or eager load all the related data at once
 
 - **Image Upload**  
   - Brokers can upload and manage listing images.

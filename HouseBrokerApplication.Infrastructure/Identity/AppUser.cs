@@ -5,6 +5,7 @@ namespace HouseBrokerApplication.Infrastructure.Identity
 {
     public class AppUser : IdentityUser<int>
     {
+        private AppUser() { }
         public AppUser(string username, UserInfo userInfo) : base(username)
         {
             UserInfo = userInfo;

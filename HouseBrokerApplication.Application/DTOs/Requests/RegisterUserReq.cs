@@ -9,5 +9,7 @@
         public string ContactEmail { get; set; }
         public string ContactPhone { get; set; }
         public bool RegisterAsBroker { get; set; }
+        public string ClientId { get; set; } = string.Empty;
+        public string ClientSecret { get; set; }= string.Empty;
     }
 }

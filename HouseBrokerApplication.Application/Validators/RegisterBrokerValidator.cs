@@ -9,7 +9,7 @@ namespace HouseBrokerApplication.Application.Validators
         {
             RuleFor(user => user.UserName).NotEmpty().WithMessage("Username is required");
             RuleFor(user => user.Password).NotEmpty().WithMessage("Passwird is required")
-                .Matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$\r\n")
+                .Matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,}$")
                 .WithMessage("Password is weak");
             RuleFor(user => user.FirstName).NotEmpty().WithMessage("First name is required");
             RuleFor(user => user.LastName).NotEmpty().WithMessage("Last name is required");

@@ -1,5 +1,4 @@
 ﻿using FluentValidation.Results;
-using System.Reflection.Metadata;
 
 public class Result<T>
 {
@@ -62,6 +61,7 @@ public enum ResultType
     Success,
     ValidationError,
     Error,
+    Unathorized,
 }
 
 public static class ResultExtensions

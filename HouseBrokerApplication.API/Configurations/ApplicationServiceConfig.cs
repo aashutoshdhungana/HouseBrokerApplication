@@ -2,6 +2,9 @@
 using HouseBrokerApplication.API.Services;
 using HouseBrokerApplication.Application.Abstractions.Services;
 using HouseBrokerApplication.Application.Validators;
+using HouseBrokerApplication.Domain.Base;
+using HouseBrokerApplication.Infrastructure.Implementations;
+using HouseBrokerApplication.Infrastructure.Implementations.Services;
 
 namespace HouseBrokerApplication.API.Configurations
 {
@@ -10,7 +13,10 @@ namespace HouseBrokerApplication.API.Configurations
         public static IServiceCollection ConfigureApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddValidatorsFromAssembly(typeof(RegisterBrokerValidator).Assembly);
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserIdentityService, UserIdentityService>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             return services;
         }
     }

@@ -10,6 +10,7 @@ namespace HouseBrokerApplication.Domain.Aggregates.Listing
         public UserInfo.UserInfo Buyer { get; private set; }
         public Listing Listing { get; private set; }
 
+        private Offer() { }
         public Offer(Listing listing, UserInfo.UserInfo buyer, decimal offerAmount)
         {
             Listing = listing;

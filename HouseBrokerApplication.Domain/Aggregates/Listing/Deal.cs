@@ -11,6 +11,7 @@ namespace HouseBrokerApplication.Domain.Aggregates.Listing
         public Listing Listing { get; private set; }
         public Offer Offer { get; private set; }
 
+        private Deal() { }
         public Deal(Listing listing, Offer offer, decimal commission)
         {
             Listing = listing;

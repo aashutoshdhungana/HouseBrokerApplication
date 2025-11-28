@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HouseBrokerApplication.Application.Abstractions.Services
+namespace HouseBrokerApplication.Infrastructure
 {
-    internal interface IUserInfoService
+    public class Seeder
     {
-        //Task<Result<>>
     }
 }

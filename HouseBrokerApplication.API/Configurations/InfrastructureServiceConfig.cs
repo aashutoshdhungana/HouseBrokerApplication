@@ -1,4 +1,5 @@
 ﻿using HouseBrokerApplication.Infrastructure;
+using HouseBrokerApplication.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,10 +14,10 @@ namespace HouseBrokerApplication.API.Configurations
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
             );
 
-            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>()
+            services.AddIdentity<AppUser, IdentityRole<int>>()
+                .AddSignInManager()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
 
             services.Configure<IdentityOptions>(options =>
             {

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using HouseBrokerApplication.Application.Abstractions.Services;
-using HouseBrokerApplication.Application.Constants;
 using HouseBrokerApplication.Application.DTOs.Requests;
+using HouseBrokerApplication.Application.DTOs.Responses;
 using HouseBrokerApplication.Domain.Aggregates.UserInfo;
 using HouseBrokerApplication.Domain.Base;
 using HouseBrokerApplication.Infrastructure.Identity;
@@ -14,8 +14,9 @@ namespace HouseBrokerApplication.Infrastructure.Implementations.Services
         UserManager<AppUser> userManager,
         IRepository<UserInfo> userInfoRepo,
         ITokenService tokenService,
-        AbstractValidator<RegisterUserReq> registerValidator,
-        AbstractValidator<LoginReq> loginValidator) : IUserIdentityService
+        IValidator<RegisterUserReq> registerValidator,
+        IValidator<LoginReq> loginValidator,
+        ICurrentUserService currentUserService) : IUserIdentityService
     {
         public async Task<Result<UserInfo>> RegisterUserAsync(RegisterUserReq request)
         {
@@ -24,7 +25,7 @@ namespace HouseBrokerApplication.Infrastructure.Implementations.Services
             {
                 return Result<UserInfo>.ValidationError(validationResult.Errors);
             }
-            
+
             var existingUser = await userManager.Users.FirstOrDefaultAsync(x => x.Email == request.ContactEmail || x.PhoneNumber == request.ContactPhone);
             if (existingUser is not null)
             {
@@ -38,6 +39,8 @@ namespace HouseBrokerApplication.Infrastructure.Implementations.Services
             userInfoRepo.Add(userInfo);
 
             var identityUser = new AppUser(request.UserName, userInfo);
+            identityUser.IsBroker = request.RegisterAsBroker;
+            identityUser.IsHomeSeeker = !request.RegisterAsBroker;
             identityUser.Email = request.ContactEmail;
             identityUser.PhoneNumber = request.ContactPhone;
 
@@ -48,9 +51,48 @@ namespace HouseBrokerApplication.Infrastructure.Implementations.Services
             return Result<UserInfo>.Success("User profile created", userInfo);
         }
 
-        public Task<Result<UserInfo>> Login(LoginReq request)
+        public async Task<Result<LoginResponse>> LoginAsync(LoginReq request)
         {
+            var validationResult = loginValidator.Validate(request);
+            if (!validationResult.IsValid)
+                return Result<LoginResponse>.ValidationError(validationResult.Errors);
 
+            var loginResult = await tokenService.GenerateToken(
+                request.UserName,
+                request.Password,
+                request.ClientId,
+                request.ClientSecret,
+                request.IsBrokerLogin
+                );
+
+            if (!loginResult.IsSuccess)
+                return Result<LoginResponse>.Failure(loginResult.Message ?? "Failed to login");
+
+            (UserInfo? userInfo, string token) = loginResult.Data;
+            var loginResp = new LoginResponse()
+            { UserInfo = userInfo, Token = token };
+
+            return Result<LoginResponse>.Success("Successfull", loginResp);
+        }
+
+        public async Task<Result<string>> RegisterProfileAsync(bool isBrokerPrfile)
+        {
+            if (currentUserService.ClaimsPrincipal is null)
+                return Result<string>.Failure("User is not logged in");
+
+            var user = await userManager.GetUserAsync(currentUserService.ClaimsPrincipal);
+            if (user == null) return Result<string>.Failure("User not found");
+
+            if (isBrokerPrfile && user.IsBroker) return Result<string>.Failure("User already registered as broker");
+            if (!isBrokerPrfile && user.IsHomeSeeker) return Result<string>.Failure("User already registed as home seeker");
+
+            if (isBrokerPrfile) user.IsBroker = true;
+            if (!isBrokerPrfile) user.IsHomeSeeker = true;
+            user.SecurityStamp = Guid.NewGuid().ToString();
+            var updateResult = await userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+                return Result<string>.Failure("Failed to update the user profile");
+            return Result<string>.Success("Successfull", string.Empty);
         }
     }
 }

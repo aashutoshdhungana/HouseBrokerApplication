@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class Result<T>
 {
@@ -53,6 +54,26 @@ public class Result<T>
             Data = data
         };
     }
+
+    public static Result<T> Unauthorized(string message)
+    {
+        return new Result<T>
+        {
+            IsSuccess = false,
+            Message = message,
+            ResultType = ResultType.Unathorized,
+        };
+    }
+
+    public static Result<T> NotFound()
+    {
+        return new Result<T>
+        {
+            IsSuccess = false,
+            Message = string.Empty,
+            ResultType = ResultType.NotFound,
+        };
+    }
 }
 
 
@@ -62,6 +83,7 @@ public enum ResultType
     ValidationError,
     Error,
     Unathorized,
+    NotFound
 }
 
 public static class ResultExtensions

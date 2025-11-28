@@ -1,6 +1,8 @@
 using HouseBrokerApplication.API.Configurations;
 using HouseBrokerApplication.API.Configurations.ConfigModels;
 using HouseBrokerApplication.Application.Constants;
+using HouseBrokerApplication.Application.MapsterConfig;
+using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -8,6 +10,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<FileUploadConfig>(builder.Configuration.GetSection("FileUploadConfig"));
 builder.Services.Configure<List<ClientSetting>>(builder.Configuration.GetSection("ClientSettings"));
 var jwtSettings = builder.Configuration.GetSection("JWT");
 
@@ -80,6 +83,8 @@ builder.Services.AddAuthorization((options) =>
     options.AddPolicy(AppPolicies.REQUIRE_BROKER_ROLE, policy => policy.RequireRole(AppRoles.BROKER));
 });
 
+TypeAdapterConfig.GlobalSettings.Scan(typeof(MapsterConfig).Assembly);
+
 // Program.cs
 var app = builder.Build();
 
@@ -96,6 +101,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

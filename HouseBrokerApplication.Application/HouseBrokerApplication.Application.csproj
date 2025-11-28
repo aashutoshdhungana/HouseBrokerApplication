@@ -16,8 +16,4 @@
     <ProjectReference Include="..\HouseBrokerApplication.Domain\HouseBrokerApplication.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Implementations\" />
-  </ItemGroup>
-
 </Project>

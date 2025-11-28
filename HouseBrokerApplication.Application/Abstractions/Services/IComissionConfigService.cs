@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HouseBrokerApplication.Application.Abstractions.Services
+﻿namespace HouseBrokerApplication.Application.Abstractions.Services
 {
-    internal interface IComissionConfigService
+    public interface IComissionConfigService
     {
+        public Task<decimal> CalculateCommission(decimal price);
     }
 }

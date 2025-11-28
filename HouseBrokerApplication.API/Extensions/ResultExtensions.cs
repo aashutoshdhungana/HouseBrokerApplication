@@ -20,6 +20,9 @@ namespace HouseBrokerApplication.API.Extensions
                 case ResultType.Unathorized:
                     return new UnauthorizedObjectResult(result);
 
+                case ResultType.NotFound:
+                    return new NotFoundResult();
+
                 default:
                     return new BadRequestResult();
             }

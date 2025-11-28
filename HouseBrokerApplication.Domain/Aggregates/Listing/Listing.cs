@@ -27,7 +27,7 @@ namespace HouseBrokerApplication.Domain.Aggregates.Listing
         // For Ef Core
         private Listing() { }
         public Listing(string title, string description, Address address, decimal price,
-                       ListingType propertyType, string contactPhone, string contactEmail, UserInfo.UserInfo broker)
+                       ListingType propertyType, string contactPhone, string contactEmail, int brokerId)
         {
             Title = title;
             Description = description;
@@ -37,7 +37,7 @@ namespace HouseBrokerApplication.Domain.Aggregates.Listing
             ContactPhone = contactPhone;
             ContactEmail = contactEmail;
             Status = ListingStatus.Available;
-            Broker = broker;
+            BrokerId = brokerId;
         }
 
         public void UpdateDetails(string title, string description, Address address, decimal price,

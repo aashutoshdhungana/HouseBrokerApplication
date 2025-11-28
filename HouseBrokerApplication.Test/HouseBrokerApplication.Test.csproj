@@ -12,11 +12,15 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HouseBrokerApplication.Application\HouseBrokerApplication.Application.csproj" />
     <ProjectReference Include="..\HouseBrokerApplication.Domain\HouseBrokerApplication.Domain.csproj" />
+    <ProjectReference Include="..\HouseBrokerApplication.API\HouseBrokerApplication.API.csproj" />
   </ItemGroup>
 
   <ItemGroup>

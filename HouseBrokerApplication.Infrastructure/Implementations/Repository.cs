@@ -29,6 +29,13 @@ namespace HouseBrokerApplication.Infrastructure.Implementations
             return await evaluatedQuery.ToListAsync();
         }
 
+        public async Task<T?> GetSingleBySpecification(ISpecification<T> specification)
+        {
+            var query = context.Set<T>().AsQueryable();
+            var evaluatedQuery = SpecificationEvaluator<T>.GetQuery(query, specification);
+            return await evaluatedQuery.FirstOrDefaultAsync();
+        }
+
         public void Update(T entity)
         {
             context.Update(entity);

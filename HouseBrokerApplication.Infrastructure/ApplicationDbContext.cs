@@ -31,25 +31,33 @@ namespace HouseBrokerApplication.Infrastructure
             base.OnModelCreating(builder);
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public new async Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var actionByUserId = _currentUserService.UserId;
-            if (actionByUserId.HasValue)
+            try
             {
-                foreach (var entry in ChangeTracker.Entries<AuditedEntity>())
+                var actionByUserId = _currentUserService.UserId;
+                if (actionByUserId.HasValue)
                 {
-                    switch (entry.State)
+                    foreach (var entry in ChangeTracker.Entries<AuditedEntity>())
                     {
-                        case EntityState.Added:
-                            entry.Entity.SetCreated(actionByUserId.Value);
-                            break;
-                        case EntityState.Modified:
-                            entry.Entity.SetUpdated(actionByUserId.Value);
-                            break;
+                        switch (entry.State)
+                        {
+                            case EntityState.Added:
+                                entry.Entity.SetCreated(actionByUserId.Value);
+                                break;
+                            case EntityState.Modified:
+                                entry.Entity.SetUpdated(actionByUserId.Value);
+                                break;
+                        }
                     }
                 }
+                var changes = await base.SaveChangesAsync(cancellationToken);
+                return changes > 0;
             }
-            return base.SaveChangesAsync(cancellationToken);
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

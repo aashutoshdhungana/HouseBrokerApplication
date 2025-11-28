@@ -22,9 +22,10 @@ namespace HouseBrokerApplication.Test.Services
 
             var service = new CommissionConfigService(repoMock.Object);
 
-            var rate = await service.CalculateCommission(price);
+            var commission = await service.CalculateCommission(price);
 
-            Assert.Equal(expectedRate, rate);
+            var expectedCommission = expectedRate * price * 0.01m;
+            Assert.Equal(expectedCommission, commission);
         }
 
         [Fact]
@@ -41,9 +42,11 @@ namespace HouseBrokerApplication.Test.Services
 
             var service = new CommissionConfigService(repoMock.Object);
 
-            var rate = await service.CalculateCommission(1_000_000.00m);
+            var price = 1_000_000.00m;
+            var commission = await service.CalculateCommission(price);
 
-            Assert.Equal(3.5m, rate);
+            var expectedCommission = 3.5m * price * 0.01m;
+            Assert.Equal(expectedCommission, commission);
         }
     }
 }

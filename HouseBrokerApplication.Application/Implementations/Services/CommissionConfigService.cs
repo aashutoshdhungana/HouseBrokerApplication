@@ -13,12 +13,12 @@ namespace HouseBrokerApplication.Application.Implementations.Services
             var commissionSlab = await commissionRepository.GetSingleBySpecification(specificationFilter);
             if (commissionSlab == null)
             {
-                if (price < 5000000) return 2;
-                else if (price >= 5000000 && price <= 10000000) return 1.75m;
-                else return 1.5m;
+                if (price < 5000000) return 2 * price * 0.01m;
+                else if (price >= 5000000 && price <= 10000000) return 1.75m * price * 0.01m;
+                else return 1.5m * price * 0.01m;
             }
             else
-                return commissionSlab.CommissionRate;
+                return commissionSlab.CommissionRate * price * 0.01m;
         }
     }
 }

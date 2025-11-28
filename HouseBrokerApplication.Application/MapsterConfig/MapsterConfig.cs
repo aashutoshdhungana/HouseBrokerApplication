@@ -48,6 +48,9 @@ namespace HouseBrokerApplication.Application.MapsterConfig
             config.NewConfig<ListingImage, ImageResponse>()
                 .Map(dest => dest.ImageName, src => src.FileInfo != null ? src.FileInfo.DisplayName : string.Empty)
                 .Map(dest => dest.ImageUrl, src => src.FileInfo != null ? src.FileInfo.Url : string.Empty);
+
+            config.NewConfig<Listing, DetailedListing>()
+            .Map(dest => dest.BrokerFullName, src => src.Broker != null ? $"{src.Broker.FirstName} {src.Broker.LastName}" : "");
         }
     }
 }

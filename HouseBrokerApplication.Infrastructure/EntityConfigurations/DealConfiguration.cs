@@ -9,7 +9,7 @@ namespace HouseBrokerApplication.Infrastructure.EntityConfigurations
         public void Configure(EntityTypeBuilder<Deal> builder)
         {
             builder.HasOne(d => d.Offer)
-                .WithOne()
+                .WithOne(o => o.Deal)
                 .HasForeignKey<Deal>(d => d.OfferId)
                 .OnDelete(DeleteBehavior.Restrict);
 
